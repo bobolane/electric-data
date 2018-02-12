@@ -1,0 +1,42 @@
+current = int(input("Current: "))
+phase = int(input("Phase 1 or 3: "))
+if phase == 1:
+  current = current * 2
+elif phase == 3:
+  current = current * 1.732
+  
+voltage = int(input("Voltage: "))
+
+wire = int(input("AWG#: "))
+if wire == 10:
+  wire = 10380
+elif wire == 8:
+  wire = 16510
+elif wire == 6:
+  wire = 26240
+elif wire == 4:
+  wire = 41740
+elif wire == 3:
+  wire = 52620
+else:
+  print "Unrecognized wire gauage; please try again."
+
+wire_type = raw_input("cu or al: ")
+if wire_type == "cu":
+  current = current * 12.9
+elif wire_type == "al":
+  current = current * 21.2
+  
+length = int(input("Circuit Length: "))
+
+numerator = current * length
+denominator = wire
+
+volts_dropped = numerator / denominator
+vd = voltage - volts_dropped
+vd_percentage = vd / voltage
+actual_vd_percentage = 1 - vd_percentage
+percentage = actual_vd_percentage * 100
+percentage = float(percentage)
+
+print "Voltage drop for this circuit is %.2f%%." % percentage
