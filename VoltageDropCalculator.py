@@ -11,9 +11,13 @@ awg_to_circmils = {
 # think about how these functions differ from the dictionary above.
 # in this case they perform a strict lookup as well. when might you use one or the other?
 # would you use a function or dictionary to compute a bit of arithmetic?
+# - generally speaking it seems a dictionary is useful for a strict lookup,
+# - whereas a function is likely used for continuous values derived from calculations.
 # what if you had a large number of values that correspond 1:1 with a pre-computed output?
 # what happens in the following functions when the input doesn't correspond to an output?
 # what happens in the dictionary when a given key is not present?
+# - both would throw an error? can I loop back through, using 'break' and 'continue'?
+# - (example further down.)
 
 def phase_modifier(phase):
   if phase == 1:
@@ -37,6 +41,7 @@ wire_type = raw_input("cu or al: ")
 current = base_current * phase_modifier(phase) * wire_modifier(wire_type)
 
 # might you want to move the input for length here?
+# - Yes!
 # Then all requirments for 'numerator' would be met, and you could proceed to calculate denominator
 # Of course if the order of input is important, then that's not a good idea
 # But generally it's nice to keep related things together
@@ -52,12 +57,27 @@ except KeyError:
   # You could remove the try block to understand how I determined which exception to catch
   print("Unrecognized wire gauage; please try again.")
   # Might you want to exit() here?
+# - having a bit of trouble with the try/except example above (an entirely new operation to me.)
+# - also tried a for loop (below), but didn't really achieve great success there either.
+for key in awg_to_circmils:
+  awg = int(input("AWG#: "))
+  if awg == key:
+    wire = awg_to_circmils[key]
+    break
+  else:
+    print "Not a recognized wire gauge, please try again."
+    continue
+# - overall i need to spend some serious time polishing-up the execution of loops.
+# - both in memorizing their basic mechanics, and in recognizing superiority of one method over another given a certain situation.
   
 length = int(input("Circuit Length: "))
 
 # You could declare new functions to perform some or all of these calculations
 # If so, what granularity makes sense, should there be one or many functions?
 # What are the trade offs? Right now it is nice to see the intermediate values along the way
+# - readability vs. brevity? perhaps, generally, the least number of functions?
+# - perhaps controlling my excitement and thoughtfully generating the code as opposed to
+# - entering a new line for every single step? :)
 
 numerator = current * length
 denominator = wire
