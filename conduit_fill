@@ -1,0 +1,155 @@
+conductor_gauge = input("AWG#: ")
+conductor_type = input("Insulation type: ")
+num_conductors = int(input("No. of Conductors: "))
+conduit_type = input("Conduit Type: ")
+
+thhn_awg_to_area = {"10": .0211,
+"8": .0366,
+"6": .0507,
+"4": .0824,
+"3": .0973,
+"2": .1158,
+"1": .1562,
+"1/0": .1855,
+"2/0": .2223,
+"3/0": .2679,
+"4/0": .3237,
+"250 kcmil": .3970,
+"300 kcmil": .4608
+}
+
+rhh_awg_to_area = {"10": .0211,
+"8": .0835,
+"6": .1041,
+"4": .1333,
+"3": .1521,
+"2": .1750,
+"1": .2660,
+"1/0": .3039,
+"2/0": .3505,
+"3/0": .4072,
+"4/0": 4757,
+"250 kcmil": .6291,
+"300 kcmil": .7088
+}
+
+def thhn_value(x):
+  if conductor_type == "thhn" or conductor_type == "thwn":
+    for key in thhn_awg_to_area:
+      if x == key:
+        return thhn_awg_to_area[key]
+      
+def rhh_value(x):
+  if conductor_type == "rhh" or conductor_type == "pv":
+    for key in rhh_awg_to_area:
+      if x == key:
+        return rhh_awg_to_area[key]
+
+thhn = thhn_value(conductor_gauge)
+rhh = rhh_value(conductor_gauge)
+
+if conductor_type == "rhh" or conductor_type == "pv":
+  area = rhh * num_conductors
+elif conductor_type == "thhn" or conductor_type == "thwn":
+  area = thhn * num_conductors
+
+# EMT cross-sectional area 
+emt_half_inch = .304
+emt_three_quarter_inch = .533
+emt_one_inch = .864
+emt_one_one_quarter_inch = 1.496
+emt_one_one_half_inch = 2.036
+emt_two_inch = 3.356
+emt_two_one_half_inch = 5.858
+emt_three_inch = 8.846
+emt_three_one_half_inch = 11.545
+emt_four_inch = 14.753
+
+# Per NEC, 2 or more conductors cannot exceed 40%
+# of cross-sectional area of conduit
+if conduit_type == "emt":
+  if area <= .122:
+    cross_area = area / emt_half_inch
+    print('1/2" EMT')
+  elif .123 <= area <= .213:
+    cross_area = area / emt_three_quarter_inch
+    print('3/4" EMT')
+  elif .214 <= area <= .346:
+    cross_area = area / emt_one_inch
+    print('1" EMT')
+  elif .347 <= area <= .598:
+    cross_area = area / emt_one_one_quarter_inch
+    print('1-1/4" EMT')
+  elif .599 <= area <= .814:
+    cross_area = area / emt_one_one_half_inch
+    print('1-1/2" EMT')
+  elif .815 <= area <= 1.342:
+    cross_area = area / emt_two_inch
+    print('2" EMT')
+  elif 1.343 <= area <= 2.343:
+    cross_area = area / emt_two_one_half_inch
+    print('2-1/2" EMT')
+  elif 2.344 <= area <= 3.538:
+    cross_area = area / emt_three_inch
+    print('3" EMT')
+  elif 3.539 <= area <= 4.618:
+    cross_area = area / emt_three_one_half_inch
+    print('3-1/2" EMT')
+  elif 4.619 <= area <= 5.901:
+    cross_area = area / emt_four_inch
+
+# PVC cross-sectional area
+pvc_half_inch = .285
+pvc_three_quarter_inch = .508
+pvc_one_inch = .832
+pvc_one_one_quarter_inch = 1.453
+pvc_one_one_half_inch = 1.986
+pvc_two_inch = 3.291
+pvc_two_one_half_inch = 4.695
+pvc_three_inch = 7.268
+pvc_three_one_half_inch = 9.737
+pvc_four_inch = 12.554
+pvc_five_inch = 19.761
+pvc_six_inch = 28.567
+    
+# Per NEC, 2 or more conductors cannot exceed 40%
+# of cross-sectional area of conduit
+if conduit_type == "pvc":
+  if area <= .114:
+    cross_area = area / pvc_half_inch
+    print('1/2" PVC')
+  elif .115 <= area <= .203:
+    cross_area = area / pvc_three_quarter_inch
+    print('3/4" PVC')
+  elif .204 <= area <= .333:
+    cross_area = area / pvc_one_inch
+    print('1" PVC')
+  elif .334 <= area <= .581:
+    cross_area = area / pvc_one_one_quarter_inch
+    print('1-1/4" PVC')
+  elif .582 <= area <= .794:
+    cross_area = area / pvc_one_one_half_inch
+    print('1-1/2" PVC')
+  elif .795 <= area <= 1.316:
+    cross_area = area / pvc_two_inch
+    print('2" PVC')
+  elif  1.317 <= area <= 1.878:
+    cross_area = area / pvc_two_one_half_inch
+    print('2-1/2" PVC')
+  elif 1.879 <= area <= 2.907:
+    cross_area = area / pvc_three_inch
+    print('3" PVC')
+  elif 2.908 <= area <= 3.895:
+    cross_area = area / pvc_three_one_half_inch
+    print('3-1/2" PVC')
+  elif 3.896 <= area <= 5.022:
+    cross_area = area / pvc_four_inch
+    print('4" PVC')
+  elif 5.023 <= area <= 7.904:
+    cross_area = area / pvc_five_inch
+    print('5" PVC')
+  elif 7.905 <= area <= 11.427:
+    cross_area = area / pvc_six_inch
+    print('6" PVC')
+cross_area = cross_area * 100
+print("%.2f%%" % cross_area)
